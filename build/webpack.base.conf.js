@@ -14,10 +14,7 @@ module.exports = {
         app: resolve('src/app.js'),
         index: resolve('src/script/index.js'),
     },
-    devServer: {
-        contentBase: './dist',
-        publicPath: '/'
-    },
+    
     output: {
         path: resolve("dist"),
         filename: "js/[name].[chunkhash].js",

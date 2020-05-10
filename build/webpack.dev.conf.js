@@ -9,7 +9,20 @@ function resolve (dir) {
     return path.join(__dirname, '..', dir)
 }
 
+const HOST = process.env.HOST
+const PORT = process.env.PORT && Number(process.env.PORT)
+
 module.exports = merge(baseWebpackConfig, {
+    devServer: {
+        contentBase: './dist',
+        publicPath: config.dev.assetsPublicPath,
+        clientLogLevel: 'warning',
+        hot: true,
+        host: HOST || config.dev.host,
+        port: PORT || config.dev.port,
+        proxy: config.dev.proxyTable,
+    },
+
     module: {
         rules: [
             {
