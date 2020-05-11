@@ -29,3 +29,11 @@ let name = '123',
 arr.forEach(item => {
     console.log(item);
 })
+
+let el = document.createElement('div');
+el.innerHTML = '新建的元素12345678'
+document.body.appendChild(el);
+
+if (module.hot) {
+    module.hot.accept()
+}
