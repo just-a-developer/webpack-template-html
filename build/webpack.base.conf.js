@@ -23,7 +23,7 @@ module.exports = {
         filename: utils.assetsPath('js/[name].js'),
         publicPath: isProd ? config.build.assetsPublicPath
             : config.dev.assetsPublicPath,
-        chunkFilename: utils.assetsPath('js/[id].js'),
+        chunkFilename: utils.assetsPath('js/[name].js'),
     },
     resolve: {
         extensions: ['.js', '.vue', '.json', '.sass', '.scss'],
@@ -37,8 +37,8 @@ module.exports = {
             '@lib': resolve('src/lib'),
             '@class': resolve('src/classes'),
             '@mixin': resolve('src/mixins'),
-            '@img': resolve('static/imgs'),
-            '@static': resolve('static'),
+            '@img': resolve('public/imgs'),
+            '@static': resolve('public'),
         }
     },
     module: {
@@ -50,11 +50,42 @@ module.exports = {
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-                loader: 'url-loader',
-                options: {
-                    limit: 10000,
-                    name: 'img/[name].[ext]?[hash]'
-                }
+                
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 10000,
+                            name: utils.assetsPath('img/[name].[ext]?[hash]')
+                        },
+                    },
+                    // 图片压缩
+                    {
+                        loader: 'image-webpack-loader',// 压缩图片
+                        options: {
+                            mozjpeg: {
+                                progressive: true,
+                                quality: 65
+                            },
+                            // optipng.enabled: false will disable optipng
+                            optipng: {
+                                enabled: false,
+                            },
+                            pngquant: {
+                                quality: [0.65, 0.90],
+                                speed: 4
+                            },
+                            gifsicle: {
+                                interlaced: false,
+                            },
+
+                            // the webp option will enable WEBP
+                            webp: {
+                                quality: 75
+                            }
+                        }
+                    }
+                ]
             },
             {
                 test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
@@ -89,7 +120,7 @@ module.exports = {
     optimization: {
         minimize: isProd,
         splitChunks: {
-            chunks: "async", // 共有三个值可选：initial(初始模块)、async(按需加载模块)和all(全部模块)
+            chunks: "all", // 共有三个值可选：initial(初始模块)、async(按需加载模块)和all(全部模块)
             minSize: 30 * 1000, // 模块超过30k自动被抽离成公共模块
             maxAsyncRequests: 5,  // 异步加载chunk的并发请求数量<=5
             maxInitialRequests: 3, // 一个入口并发加载的chunk数量<=3
@@ -100,11 +131,21 @@ module.exports = {
                 //公用模块抽离
                 scripts: {
                     name: 'common',
-                    chunks: 'initial',
                     minSize: 0, //大于0个字节
                     minChunks: 2, //在分割之前，这个代码块最小应该被引用的次数
                 },
+
+                vendors: {  // 抽离第三方插件
+                    test: /[\\/]node_modules[\\/]/,     // 指定是node_modules下的第三方包
+                    name: "vendors",
+                    priority: -10                       // 抽取优先级
+                },
             }
+        },
+
+        // 为 webpack 运行时代码创建单独的chunk
+        runtimeChunk:{
+            name:'manifest'
         },
 
         minimizer: [
