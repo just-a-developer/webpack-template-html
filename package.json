@@ -6,11 +6,10 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "ser": "node build/dev-server.js",
     "serve": "nodemon build/dev-server.js",
     "dev": "webpack-dev-server --config build/webpack.dev.conf.js",
     "build": "cross-env NODE_ENV=production webpack --config build/webpack.prod.conf.js --progress --hide-modules",
-    "build:js": "npx babel src/app.js --out-file dist/out.js"
+    "build:test": "webpack --config build/webpack.prod.conf.js --progress --hide-modules"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

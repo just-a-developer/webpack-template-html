@@ -49,7 +49,6 @@ module.exports = {
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-                
                 use: [
                     {
                         loader: 'url-loader',
@@ -85,6 +84,11 @@ module.exports = {
                         }
                     }
                 ]
+            },
+            {
+                test: /\.art$/,
+                loader: "art-template-loader",
+                include: [resolve('src')]
             },
             {
                 test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,

@@ -11,14 +11,16 @@ const defaults = {
     filename: '',
     template: '',
     chunks: '',
+    templateParameters: {}
 }
 console.log(isProd);
 // 构建入口
 exports.buildEntry = function (entrys) {
     let entry = {};
 
-    entrys.forEach(item => {
-        // entry[item.entry] = isProd ? item.entryPath : [item.entryPath, resolve('build/hotCode.js')];
+    entrys.list.forEach(item => {
+        if(!item.entry) return;
+
         entry[item.entry] = item.entryPath;
     })
     
@@ -27,15 +29,21 @@ exports.buildEntry = function (entrys) {
 
 // 构建生成 HTML 模板的入口
 exports.buildTemplateEntry = function (entrys) {
-    let arr = [];
+    let arr = [],
+        parameters = entrys.globalParameters;
         
-    entrys.forEach(item => {
+    entrys.list.forEach(item => {
         let opt = Object.assign({}, defaults);
 
         opt.title = item.title;
         opt.filename = `view/${ item.filename || item.entry }.html`;
         opt.template = item.template;
-        opt.chunks = [item.entry]
+
+        opt.templateParameters = item.templateParameters ? 
+                Object.assign({}, parameters, item.templateParameters) :
+                Object.assign({}, parameters);
+
+        opt.chunks = item.entry ? [item.entry] : [];
 
         arr.push(new HtmlWebpackPlugin(opt));
     })

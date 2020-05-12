@@ -2,12 +2,10 @@ const path = require('path')
 const express = require('express');
 const webpack = require('webpack')
 const webpackDevServer = require('webpack-dev-server');
-const webpackDevMiddleware = require('webpack-dev-middleware')
-const webpackHotMiddleware = require('webpack-hot-middleware')
 
 const app = express()
 const baseConfig = require('../config/idnex')
-const config = require('./webpack.dev')
+const config = require('./webpack.dev.conf')
 const compiler = webpack(config);
 
 const HOST = process.env.HOST

@@ -1,1 +1,0 @@
-{"source":"(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{4:function(n,e,s){\"use strict\";s.r(e);var a=s(0),i=s.n(a),t=s(1),o=s.n(t);function c(n){i()(this,c),this.message=n}s(5),o()(c,[{key:\"say\",value:function(){alertMe(this.message)}}]),new c(\"hello babel\").say()},5:function(n,e,s){}},[[4,1,0]]]);"}
