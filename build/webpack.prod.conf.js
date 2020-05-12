@@ -4,14 +4,15 @@ const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const cssnano = require('cssnano')
 
 const utils =  require('./util')
+const entryHelp = require('./entryHelp')
 const config = require('../config/idnex')
 const baseWebpackConfig = require('./webpack.base.conf')
 const autoprefixer = require("autoprefixer")
+const entrys = require('../config/entry')
 
 function resolve (dir) {
     return path.join(__dirname, '..', dir)
@@ -43,6 +44,10 @@ module.exports = merge(baseWebpackConfig, {
     },
 
     plugins: [
+
+        new webpack.DefinePlugin({
+            'process.env': 'production'
+        }),
 
         // 清除之前的构建
         new CleanWebpackPlugin(),
@@ -85,17 +90,7 @@ module.exports = merge(baseWebpackConfig, {
         }),
 
         // 模板构建
-        new HtmlWebpackPlugin({
-            filename: 'view/index.html',
-            template: resolve('src/view/index.html'),
-            chunks: ['index']
-        }),
-
-        new HtmlWebpackPlugin({
-            filename: 'view/home.html',
-            template: resolve('src/view/home.html'),
-            chunks: ['home']
-        })
+        ...entryHelp.buildTemplateEntry(entrys)
     ],
 
     

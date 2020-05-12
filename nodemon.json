@@ -1,0 +1,4 @@
+{
+    "ignore": [],
+    "watch": ["./build", "./config"]
+}

@@ -1,7 +1,10 @@
 const path = require('path')
-const utils =  require('./util')
-const config = require('../config/idnex')
 const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
+
+const utils =  require('./util')
+const entryHelp = require('./entryHelp')
+const config = require('../config/idnex')
+const entrys = require('../config/entry')
 
 function resolve (dir) {
     return path.join(__dirname, '..', dir)
@@ -12,11 +15,7 @@ const isProd = process.env.NODE_ENV === "production";
 module.exports = {
     mode: isProd ? "production" : "development",
     devtool: isProd ? config.build.devtool : config.dev.devtool,
-    entry: {
-        app: resolve('src/app.js'),
-        index: resolve('src/script/index.js'),
-        home: resolve('src/script/home.js'),
-    },
+    entry: entryHelp.buildEntry(entrys),
     
     output: {
         path: resolve("dist"),
@@ -158,8 +157,8 @@ module.exports = {
                         comments: false,
                         beautify: false
                     },
+                    warnings: false,
                     compress: {
-                        warnings: false,
                         drop_console: true,
                         collapse_vars: true,
                         reduce_vars: true

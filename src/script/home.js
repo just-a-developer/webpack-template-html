@@ -1,6 +1,10 @@
 import '@css/pages/home'
 
-console.log('this is home 123');
+console.log('this is home 123456');
+
+const alertMe = (msg) => {
+    console.log(msg)
+}
 
 class Robot {
     constructor (msg) {

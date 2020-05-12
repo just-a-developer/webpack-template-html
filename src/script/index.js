@@ -2,11 +2,12 @@ import '@css/pages/index'
 
 console.log([1,2,3].findIndex(x => x == 4))
 
-console.log('abc123'.padStart(10)) 
+console.log('abc123456'.padStart(10)) 
 
 const alertMe = (msg) => {
     console.log(msg)
 }
+
 class Robot {
     constructor (msg) {
         this.message = msg
