@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const cssnano = require('cssnano')
 
@@ -51,6 +52,15 @@ module.exports = merge(baseWebpackConfig, {
 
         // 清除之前的构建
         new CleanWebpackPlugin(),
+
+        // copy custom static assets
+        new CopyWebpackPlugin([
+            {
+                from: resolve('public'),
+                to: config.build.assetsSubDirectory,
+                ignore: ['.*']
+            }
+        ]),
 
         // 代码压缩
         new UglifyJsPlugin({

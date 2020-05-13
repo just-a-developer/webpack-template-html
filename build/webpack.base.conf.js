@@ -1,5 +1,6 @@
 const path = require('path')
-const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
+const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
+const htmlLoader = require('html-loader')
 
 const utils =  require('./util')
 const entryHelp = require('./entryHelp')
@@ -34,6 +35,7 @@ module.exports = {
             '@md': resolve('src/modules'),
             '@css': resolve('src/assets/styles'),
             '@lib': resolve('src/lib'),
+            '@plugin': resolve('public/plugins'),
             '@class': resolve('src/classes'),
             '@mixin': resolve('src/mixins'),
             '@img': resolve('public/imgs'),
@@ -43,9 +45,15 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.(html)$/,
+                use: {
+                    loader: 'html-loader',
+                }
+            },
+            {
                 test: /\.js$/,
                 loader: 'babel-loader',
-                exclude: /node_modules/
+                exclude: [/node_modules/, resolve('public')]
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -54,6 +62,7 @@ module.exports = {
                         loader: 'url-loader',
                         options: {
                             limit: 10000,
+                            esModule: false,
                             name: utils.assetsPath('img/[name].[ext]?[hash]')
                         },
                     },
@@ -87,8 +96,8 @@ module.exports = {
             },
             {
                 test: /\.art$/,
-                loader: "art-template-loader",
-                include: [resolve('src')]
+                include: [resolve('src')],
+                loader: 'art-template-loader',
             },
             {
                 test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
@@ -115,10 +124,6 @@ module.exports = {
             }
         ]
     },
-
-    plugins: [
-        
-    ],
 
     optimization: {
         minimize: isProd,
@@ -170,5 +175,9 @@ module.exports = {
                 }
             }),
         ]
+    },
+
+    externals: {
+        jquery: 'jQuery'
     }
 }
